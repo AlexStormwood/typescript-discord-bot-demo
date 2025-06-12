@@ -8,13 +8,6 @@ const {
 	CLIENT_ID
 } = process.env;
 
-const commands = [
-	{
-		name: "ping",
-		description: "Replies with Pong!",
-	},
-];
-
 async function main() {
 
 	// Initialise a way to access the Discord REST API.
@@ -27,6 +20,12 @@ async function main() {
 		
 		console.log("Started refreshing application (/) commands.");
 
+		// This simplifying of the `commandsComplex` array is not
+		// strictly required, but it's useful for debugging and
+		// ensures that Discord only receives relevant info
+		// when we register the commands.
+		// We just need a name and description for each command,
+		// when doing command registration.
 		let commandsToRegister = commandsComplex.map((commandObj) => {
 				return {
 					name: commandObj.name,
@@ -38,7 +37,6 @@ async function main() {
 		console.log(JSON.stringify(commandsToRegister, null, 4));
 
 		await rest.put(Routes.applicationCommands(CLIENT_ID as string), {
-			// body: commands,
 			body: commandsToRegister,
 		});
 
